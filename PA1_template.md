@@ -1,13 +1,9 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 ## Loading and preprocessing the data
 
-```{r comment = NA}
+
+```r
 ## set the working directory
 setwd("~/Documents/workspace/datasciencecoursera/ReproducibleResearch/PeerAssessment1/RepData_PeerAssessment1")
 
@@ -39,7 +35,8 @@ activityData <- read.csv("./data/activity.csv", header = TRUE, sep = ",")
 2. Make a histogram of the total number of steps taken each day
 3. Calculate and report the mean and median of the total number of steps taken per day
 
-```{r comment = NA}
+
+```r
 ## remove observations with NA
 activityNoNA <- na.omit(activityData)
 
@@ -51,12 +48,27 @@ hist(totalStepsByDay$steps,
      main = "Total Steps by Day",
       xlab = "Steps per Day",
       col = "green")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+
+```r
 ## calculate the mean and median of the total number of steps taken per day
 activityMean <- mean(totalStepsByDay$steps)                  # calculate the mean
 activityMedian <- median(totalStepsByDay$steps)              # calculate the median
 cat("Mean (removed missing values):", activityMean)          # concatenate a label with a result for mean
+```
+
+```
+Mean (removed missing values): 10766.19
+```
+
+```r
 cat("Median (removed missing values):",  activityMedian)     # concatenate a label with a result for median
+```
+
+```
+Median (removed missing values): 10765
 ```
 
 
@@ -64,7 +76,8 @@ cat("Median (removed missing values):",  activityMedian)     # concatenate a lab
 1. Make a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
-```{r comment = NA}
+
+```r
 ## use the aggregate function to calculate the average steps taken per interval
 averageStepsByInterval <- aggregate(steps ~ interval, activityNoNA, mean)
 
@@ -75,10 +88,18 @@ plot(averageStepsByInterval$interval,
       main = "Average Steps by Interval Across All Days",
       xlab = "Interval",
       ylab = "Average Number of Steps")
-    
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+
+```r
 ## identify the 5-minute interval, on average across all days, contains the maximum number of steps
 maxAverageStepsInterval <- averageStepsByInterval[which.max(averageStepsByInterval$steps), 1]
 cat("5-minute interval with the maximum number of steps on average: ", maxAverageStepsInterval)
+```
+
+```
+5-minute interval with the maximum number of steps on average:  835
 ```
 
 
@@ -91,11 +112,18 @@ Note that there are a number of days/intervals where there are missing values (c
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
-```{r comment = NA}
+
+```r
 # calculate and report the total number of missing values in the data set (the number of rows with NAs)
 missingValues <- nrow(activityData) - nrow(activityNoNA)
 cat("Missing Values (rows with NAs): ", missingValues)
+```
 
+```
+Missing Values (rows with NAs):  2304
+```
+
+```r
 # My strategy to fill in the missing values is to use the interval means. I assumed sleep and wake cycles are relatively consistent over time.
 # The code is  based on http://www.mail-archive.com/r-help@r-project.org/msg58289.html
 # imputeData satisfies requirement 3 to create a new dataset equal to the original but with the missing data filled in
@@ -113,12 +141,27 @@ hist(imputedTotalStepsByDay$steps,
      main = "(Imputed) Total Steps by Day",
       xlab = "Steps per Day",
       col = "blue")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+
+```r
 ## calculate the mean and median of the total number of steps taken per day
 imputedActivityMean <- mean(imputedTotalStepsByDay$steps)      # calculate the mean
 imputedActivityMedian <- median(imputedTotalStepsByDay$steps)  # calculate the median
 cat("Mean (imputed):", imputedActivityMean)                       # concatenate a label with a result for mean
+```
+
+```
+Mean (imputed): 10766.19
+```
+
+```r
 cat("Median (imputed):",  imputedActivityMedian)                  # concatenate a label with a result for median
+```
+
+```
+Median (imputed): 10766.19
 ```
 
 **Question:** Do these values differ from the estimates from the first part of the assignment?   
@@ -131,7 +174,8 @@ cat("Median (imputed):",  imputedActivityMedian)                  # concatenate 
 1. Create a new factor variable in the dataset with two levels (weekday and weekend).
 2. Make a panel plot containing a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
-```{r comment = ""}
+
+```r
 # create factor variable for weekday and weekend
 weekdayList <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
 
@@ -152,5 +196,6 @@ xyplot(steps ~ interval | dayofweek,
        ylab = "Number of steps",
        main = "Weekday and Weekend Activity Patterns", 
        col = "blue")
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
